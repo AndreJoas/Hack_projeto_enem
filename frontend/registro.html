@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        p {
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .link {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Cadastro</h1>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="register-email">E-mail</label>
+                <input type="email" id="register-email" required placeholder="Digite seu e-mail">
+            </div>
+            <div class="form-group">
+                <label for="register-senha">Senha</label>
+                <input type="password" id="register-senha" required placeholder="Digite sua senha">
+            </div>
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <p>Já tem uma conta? <a href="index.html" class="link">Fazer login</a></p>
+    </div>
+
+    <script>
+        const registerForm = document.getElementById('register-form');
+        const registerEmail = document.getElementById('register-email');
+        const registerSenha = document.getElementById('register-senha');
+
+        // Submissão do formulário de cadastro
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = registerEmail.value;
+            const senha = registerSenha.value;
+
+            fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        senha
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        // Verifica se o erro é sobre e-mail duplicado
+                        if (data.erro === 'Este email já está cadastrado.') {
+                            alert('Este e-mail já está registrado. Tente outro!');
+                        } else {
+                            alert(data.erro); // Exibe outros erros caso existam
+                        }
+                    } else {
+                        alert(data.mensagem); // Mensagem de sucesso
+                        window.location.href = 'index.html'; // Redireciona para o login
+                    }
+                })
+                .catch(error => {
+                    alert('Erro na comunicação com o servidor. Tente novamente.');
+                });
+        });
+    </script>
+
+</body>
+
+</html>

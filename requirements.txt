@@ -1,0 +1,17 @@
+flask
+flask-cors
+pymongo
+werkzeug
+fpdf
+llama-index
+llama-index-llms-groq
+python-dotenv
+langchain
+langchain-groq
+faiss-cpu
+sentence-transformers
+pandas
+flask
+python-dotenv
+langchain_community
+langchain-huggingface
